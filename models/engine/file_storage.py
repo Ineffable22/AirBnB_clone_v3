@@ -71,7 +71,8 @@ class FileStorage:
         self.reload()
 
     def get(self, cls, id):
-        """returns the object based on the class and its ID, or None if not found"""
+        """returns the object based on the class and its ID,
+        or None if not found"""
         if cls is None:
             return None
         save = models.storage.all(cls)
