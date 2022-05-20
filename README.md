@@ -160,3 +160,19 @@ Jennifer Huang - [Github](https://github.com/jhuang10123) / [Twitter](https://tw
 Second part of Airbnb: Joann Vuong
 ## License
 Public Domain. No copy write protection. 
+
+
+third part of AirBnB
+<p align="center">
+Miguel Grillo -
+<a href="https://github.com/Ineffable22">
+<img src="https://img.shields.io/badge/Miguel-mainPage-blue">
+</a>
+</p>
+
+<p align="center">
+Miguel Barrera -
+<a href="https://github.com/MiguelBarreraDev">
+<img src="https://img.shields.io/badge/Miguel-mainPage-blue">
+</a>
+</p>
