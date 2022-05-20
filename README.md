@@ -158,11 +158,8 @@ Alexa Orrico - [Github](https://github.com/alexaorrico) / [Twitter](https://twit
 Jennifer Huang - [Github](https://github.com/jhuang10123) / [Twitter](https://twitter.com/earthtojhuang)
 
 Second part of Airbnb: Joann Vuong
-## License
-Public Domain. No copy write protection. 
 
-
-third part of AirBnB
+Third part of AirBnB:
 <p align="center">
 Miguel Grillo -
 <a href="https://github.com/Ineffable22">
@@ -176,3 +173,7 @@ Miguel Barrera -
 <img src="https://img.shields.io/badge/Miguel-mainPage-blue">
 </a>
 </p>
+
+
+## License
+Public Domain. No copy write protection. 
