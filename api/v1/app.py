@@ -9,23 +9,19 @@ app = Flask(__name__)
 app.register_blueprint(app_views)
 
 
-@app.errorhandler(404)
-def error(e):
-    """Handler for 404 errors"""
-    return jsonify({"error": "Not found"}), 404
-
-
 @app.teardown_appcontext
 def teardown(self):
     """Removes the current SQLAlchemy Session"""
     return storage.close()
 
 
+@app.errorhandler(404)
+def error(e):
+    """Handler for 404 errors"""
+    return jsonify({"error": "Not found"}), 404
+
+
 if __name__ == '__main__':
-    host = getenv("HBNB_API_HOST")
-    port = getenv("HBNB_API_PORT")
-    app.run(
-        host=host if host else "0.0.0.0",
-        port=port if port else 5000,
-        threaded=True, debug=True
-    )
+    host = getenv("HBNB_API_HOST") if getenv("HBNB_API_HOST") else "0.0.0.0"
+    port = getenv("HBNB_API_PORT") if getenv("HBNB_API_HOST") else 5000
+    app.run(host=host, port=port, threaded=True)
