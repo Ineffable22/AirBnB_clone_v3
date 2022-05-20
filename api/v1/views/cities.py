@@ -1,9 +1,7 @@
 #!/usr/bin/python3
 """This module implement a rule that return a view"""
-from json.decoder import JSONDecodeError
 from flask import jsonify, abort, request
 from models import storage
-import json
 from api.v1.views import app_views
 from models.city import City
 from models.state import State
@@ -35,7 +33,7 @@ def delete_city(city_id):
         abort(404)
     city.delete()
     storage.save()
-    return jsonify({}), 200
+    return jsonify({})
 
 
 @app_views.route("/states/<state_id>/cities", methods=["POST"])
