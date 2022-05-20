@@ -78,8 +78,12 @@ class DBStorage:
     def get(self, cls, id):
         """returns the object based on the class and its ID,
         or None if not found"""
-        if cls is None:
+        if cls is None or id is None:
             return None
+        if type(cls) is str:
+            if cls not in classes:
+                return None
+            cls = classes[cls]
         save = models.storage.all(cls)
         return save.get("{}.{}".format(cls.__name__, id))
 
