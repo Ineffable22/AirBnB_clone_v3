@@ -75,8 +75,12 @@ class FileStorage:
         or None if not found"""
         if cls is None:
             return None
+        if type(cls) is str:
+            if cls not in classes:
+                return None
+            cls = classes[cls]
         save = models.storage.all(cls)
-        return save["{}.{}".format(cls.__name__, id)]
+        return save.get("{}.{}".format(cls.__name__, id))
 
     def count(self, cls=None):
         """returns the number of objects in storage matching the given class.
