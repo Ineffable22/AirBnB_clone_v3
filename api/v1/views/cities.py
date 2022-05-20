@@ -18,7 +18,7 @@ def cities_by_state(state_id):
 
 
 @app_views.route("/cities/<city_id>", methods=["GET"],
-                 strict_slashes=False))
+                 strict_slashes=False)
 def show_city(city_id):
     """Endpoint that return a City object"""
     city = storage.get(City, city_id)
@@ -40,7 +40,7 @@ def delete_city(city_id):
 
 
 @app_views.route("/states/<state_id>/cities", methods=["POST"],
-                 strict_slashes=False))
+                 strict_slashes=False)
 def insert_city(state_id):
     """Endpoint that insert a City object"""
     state = storage.get(State, state_id)
@@ -58,7 +58,7 @@ def insert_city(state_id):
 
 
 @app_views.route("/cities/<city_id>", methods=["PUT"],
-                 strict_slashes=False))
+                 strict_slashes=False)
 def update_city(city_id):
     """Endpoint that update a City object"""
     city = storage.get(City, city_id)
