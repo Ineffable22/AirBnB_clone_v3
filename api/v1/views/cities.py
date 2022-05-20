@@ -51,8 +51,8 @@ def insert_city(state_id):
         abort(404, description="Not a JSON")
     if not props.get("name"):
         abort(400, description="Missing name")
-    props.update({"state_id": state_id})
     new_city = City(**props)
+    new_city.state_id = state_id
     new_city.save()
     return jsonify(new_city.to_dict()), 201
 
