@@ -8,27 +8,21 @@ from api.v1.views import app_views
 from flask import jsonify, abort, request
 
 
-@app_views.route('/amenities', defaults={'amenity_id': None}, methods=['GET'],
-                 strict_slashes=False)
-@app_views.route('/amenities/<path:amenity_id>')
+@app_views.route('/amenities', methods=['GET'], strict_slashes=False)
+@app_views.route('/amenities/<amenity_id>')
 def get_method(amenity_id):
+    res = []
     if amenity_id is None:
-        dict_ = []
-        for val in storage.all(Amenity).values():
-            dict_.append(val.to_dict())
-        return jsonify(dict_)
-
-    amenity = storage.get(Amenity, amenity_id)
-    if amenity is None:
-        abort(404)
-    return jsonify(amenity.to_dict())
+        res = [amenity.to_dict() for amenity in storage.all(Amenity).values()]
+    else:
+        res = storage.get(Amenity, amenity_id)
+        res = res.to_dict() if res else abort(404)
+    return jsonify(res)
 
 
-@app_views.route('/amenities/<path:amenity_id>', methods=['DELETE'],
+@app_views.route('/amenities/<amenity_id>', methods=['DELETE'],
                  strict_slashes=False)
 def delete_method(amenity_id):
-    if amenity_id is None:
-        abort(404)
     amenity = storage.get(Amenity, amenity_id)
     if amenity is None:
         abort(404)
@@ -37,30 +31,30 @@ def delete_method(amenity_id):
     return jsonify({})
 
 
-@app_views.route('/amenity', methods=['POST'],
+@app_views.route('/amenities', methods=['POST'],
                  strict_slashes=False)
 def post_method():
-    res = request.get_json()
+    body = request.get_json()
     if type(res) != dict:
         return abort(400, {'message': 'Not a JSON'})
     if 'name' not in res:
         return abort(400, {'message': 'Missing name'})
-    new_amenity = Amenity(**res)
+    new_amenity = Amenity(**body)
     new_amenity.save()
     return jsonify(new_amenity.to_dict()), 201
 
 
-@app_views.route('/amenity/<path:amenity_id>', methods=['PUT'],
+@app_views.route('/amenities/<amenity_id>', methods=['PUT'],
                  strict_slashes=False)
 def put_method(amenity_id):
     amenity = storage.get(Amenity, amenity_id)
     if amenity is None:
         abort(404)
-    res = request.get_json()
-    if type(res) != dict:
+    body = request.get_json()
+    if type(body) != dict:
         return abort(400, {'message': 'Not a JSON'})
-    for key, value in res.items():
-        if key not in ["id", "amenity_id", "created_at", "updated_at"]:
+    for key, value in body.items():
+        if key not in ["id", "created_at", "updated_at"]:
             setattr(amenity, key, value)
     storage.save()
     return jsonify(amenity.to_dict()), 200
