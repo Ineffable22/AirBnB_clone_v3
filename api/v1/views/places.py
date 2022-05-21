@@ -5,7 +5,7 @@ from models import storage
 from api.v1.views import app_views
 from models.city import City
 from models.place import Place
-
+from models.user import User
 
 @app_views.route("/cities/<city_id>/places", methods=["GET"],
                  strict_slashes=False)
@@ -19,7 +19,7 @@ def place_by_city(city_id):
 
 @app_views.route("/places/<place_id>", methods=["GET"],
                  strict_slashes=False)
-def show_city(place_id):
+def show_place(place_id):
     """Endpoint that return a Place object"""
     place = storage.get(Place, place_id)
     if place is None:
@@ -27,9 +27,9 @@ def show_city(place_id):
     return jsonify(place.to_dict())
 
 
-@app_views.route("/place/<place_id>", methods=["DELETE"],
+@app_views.route("/places/<place_id>", methods=["DELETE"],
                  strict_slashes=False)
-def delete_city(place_id):
+def delete_place(place_id):
     """Endpoint that delete a Place object"""
     place = storage.get(Place, place_id)
     if place is None:
@@ -41,22 +41,22 @@ def delete_city(place_id):
 
 @app_views.route("/cities/<city_id>/places", methods=["POST"],
                  strict_slashes=False)
-def insert_city(city_id):
+def insert_place(city_id):
     """Endpoint that insert a Place object"""
     city = storage.get(City, city_id)
     if city is None:
         abort(404)
-    props = request.get_json()
-    if type(props) != dict:
+    res = request.get_json()
+    if type(res) != dict:
         abort(400, description="Not a JSON")
-    if not props.get("user_id"):
+    if not res.get("user_id"):
         abort(400, description="Missing user_id")
     user = storage.get(User, city_id)
     if user is None:
         abort(404)
-    if not user.get("name"):
+    if not res.get("name"):
         abort(400, description="Missing name")
-    new_place = Place(**props)
+    new_place = Place(**res)
     new_place.city_id = city_id
     new_place.save()
     return jsonify(new_place.to_dict()), 201
@@ -69,11 +69,11 @@ def update_city(place_id):
     place = storage.get(Place, place_id)
     if place is None:
         abort(404)
-    props = request.get_json()
-    if type(props) != dict:
+    res = request.get_json()
+    if type(res) != dict:
         abort(400, description="Not a JSON")
-    for key, value in props.items():
+    for key, value in res.items():
         if key not in ["id", "user_id", "city_id", "created_at", "updated_at"]:
             setattr(place, key, value)
-    storage.save()
+    palce.save()
     return jsonify(place.to_dict()), 200
