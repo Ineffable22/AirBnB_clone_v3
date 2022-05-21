@@ -7,7 +7,8 @@ from api.v1.views import app_views
 from flask import jsonify, abort, request
 
 
-@app_views.route('/amenities', methods=['GET'], strict_slashes=False)
+@app_views.route('/amenities', methods=['GET'],
+                 strict_slashes=False)
 def amenities():
     res = [
         amenity.to_dict() for amenity in storage.all(Amenity).values()
@@ -26,7 +27,7 @@ def amenity_by_id(amenity_id):
 
 @app_views.route('/amenities/<amenity_id>', methods=['DELETE'],
                  strict_slashes=False)
-def delete_method(amenity_id):
+def delete_amenity(amenity_id):
     amenity = storage.get(Amenity, amenity_id)
     if amenity is None:
         abort(404)
@@ -37,7 +38,7 @@ def delete_method(amenity_id):
 
 @app_views.route('/amenities', methods=['POST'],
                  strict_slashes=False)
-def post_method():
+def insert_amenity():
     body = request.get_json()
     if type(body) != dict:
         return abort(400, {'message': 'Not a JSON'})
@@ -50,7 +51,7 @@ def post_method():
 
 @app_views.route('/amenities/<amenity_id>', methods=['PUT'],
                  strict_slashes=False)
-def put_method(amenity_id):
+def update_amenity_by_id(amenity_id):
     amenity = storage.get(Amenity, amenity_id)
     if amenity is None:
         abort(404)
