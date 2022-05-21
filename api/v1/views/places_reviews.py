@@ -52,8 +52,9 @@ def insert_review(place_id):
         abort(400, description="Not a JSON")
     if not res.get("user_id"):
         abort(400, description="Missing user_id")
-    review = storage.get(User, res.get("place_id"))
-    if review is None:
+    res['place_id'] = place_id
+    user = storage.get(User, res.get('user_id'))
+    if user is None:
         abort(404)
     if not res.get("text"):
         abort(400, description="Missing text")
