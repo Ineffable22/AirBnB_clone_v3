@@ -3,7 +3,6 @@
 all default RESTFul API actions"""
 from models import storage
 from models.amenity import Amenity
-from models.base_model import BaseModel
 from api.v1.views import app_views
 from flask import jsonify, abort, request
 
@@ -35,9 +34,9 @@ def delete_method(amenity_id):
                  strict_slashes=False)
 def post_method():
     body = request.get_json()
-    if type(res) != dict:
+    if type(body) != dict:
         return abort(400, {'message': 'Not a JSON'})
-    if 'name' not in res:
+    if 'name' not in body:
         return abort(400, {'message': 'Missing name'})
     new_amenity = Amenity(**body)
     new_amenity.save()
