@@ -10,7 +10,7 @@ from models.state import State
 @app_views.route("/states/<state_id>/cities", methods=["GET"],
                  strict_slashes=False)
 def cities_by_state(state_id):
-    """View function that return object by state"""
+    """View function that return city objects by state"""
     state = storage.get(State, state_id)
     if state is None:
         abort(404)
@@ -48,7 +48,7 @@ def insert_city(state_id):
         abort(404)
     props = request.get_json()
     if type(props) != dict:
-        abort(404, description="Not a JSON")
+        abort(400, description="Not a JSON")
     if not props.get("name"):
         abort(400, description="Missing name")
     new_city = City(**props)
