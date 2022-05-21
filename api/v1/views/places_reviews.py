@@ -66,7 +66,7 @@ def insert_review(place_id):
 
 @app_views.route("/reviews/<review_id>", methods=["PUT"],
                  strict_slashes=False)
-def update_place(review_id):
+def update_review(review_id):
     """Endpoint that update a Review object"""
     review = storage.get(Review, review_id)
     if review is None:
@@ -75,8 +75,8 @@ def update_place(review_id):
     if type(res) != dict:
         abort(400, description="Not a JSON")
     for key, value in res.items():
-        if key not in
-        ["id", "user_id", "place_id", "created_at", "updated_at"]:
+        if key not in ["id", "user_id", "place_id",
+                       "created_at", "updated_at"]:
             setattr(review, key, value)
     storage.save()
     return jsonify(review.to_dict()), 200
