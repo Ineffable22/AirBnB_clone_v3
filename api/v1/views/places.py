@@ -52,7 +52,7 @@ def insert_place(city_id):
         abort(400, description="Not a JSON")
     if not res.get("user_id"):
         abort(400, description="Missing user_id")
-    user = storage.get(User, city_id)
+    user = storage.get(User, res.get("user_id"))
     if user is None:
         abort(404)
     if not res.get("name"):
@@ -76,5 +76,5 @@ def update_place(place_id):
     for key, value in res.items():
         if key not in ["id", "user_id", "city_id", "created_at", "updated_at"]:
             setattr(place, key, value)
-    palce.save()
+    storage.save()
     return jsonify(place.to_dict()), 200
