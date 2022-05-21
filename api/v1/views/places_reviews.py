@@ -28,7 +28,7 @@ def show_review(review_id):
     return jsonify(review.to_dict())
 
 
-@app_views.route("/review/<review_id>", methods=["DELETE"],
+@app_views.route("/reviews/<review_id>", methods=["DELETE"],
                  strict_slashes=False)
 def delete_review(review_id):
     """Endpoint that delete a Review object"""
