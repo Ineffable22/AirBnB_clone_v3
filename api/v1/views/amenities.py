@@ -8,15 +8,20 @@ from flask import jsonify, abort, request
 
 
 @app_views.route('/amenities', methods=['GET'], strict_slashes=False)
-@app_views.route('/amenities/<amenity_id>')
-def get_method(amenity_id):
-    res = []
-    if amenity_id is None:
-        res = [amenity.to_dict() for amenity in storage.all(Amenity).values()]
-    else:
-        res = storage.get(Amenity, amenity_id)
-        res = res.to_dict() if res else abort(404)
-    return jsonify(res)
+def amenities():
+    res = [
+        amenity.to_dict() for amenity in storage.all(Amenity).values()
+    ]
+    return res
+
+
+@app_views.route('/amenities/<amenity_id>', methods=['GET'],
+                 strict_slashes=False)
+def amenity_by_id(amenity_id):
+    res = storage.get(Amenity, amenity_id)
+    if res is None:
+        abort(404)
+    return jsonify(res.to_dict())
 
 
 @app_views.route('/amenities/<amenity_id>', methods=['DELETE'],
