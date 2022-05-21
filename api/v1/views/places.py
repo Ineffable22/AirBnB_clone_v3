@@ -7,6 +7,7 @@ from models.city import City
 from models.place import Place
 from models.user import User
 
+
 @app_views.route("/cities/<city_id>/places", methods=["GET"],
                  strict_slashes=False)
 def place_by_city(city_id):
@@ -64,7 +65,7 @@ def insert_place(city_id):
 
 @app_views.route("/places/<place_id>", methods=["PUT"],
                  strict_slashes=False)
-def update_city(place_id):
+def update_place(place_id):
     """Endpoint that update a Place object"""
     place = storage.get(Place, place_id)
     if place is None:
