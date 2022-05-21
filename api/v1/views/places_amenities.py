@@ -55,13 +55,13 @@ def insert_amenity_in_place(place_id, amenity_id):
         abort(404)
     if mode == "db":
         if amenity in place.amenities:
-            return jsonify(amenity)
+            return jsonify(amenity.to_dict())
         else:
             place.amenities.append(amenity)
     else:
         if amenity.id in place.amenity_id:
-            return jsonify(amenity)
+            return jsonify(amenity.to_dict())
         else:
             place.amenity_id.append(amenity.id)
     storage.save()
-    return jsonify(amenity), 201
+    return jsonify(amenity.to_dict()), 201
