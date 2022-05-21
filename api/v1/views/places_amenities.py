@@ -2,10 +2,10 @@
 """New view for the link between Place objects and Amenity objects"""
 from models.place import Place
 from models.amenity import Amenity
-from api.v1.view import app_views
+from api.v1.views import app_views
 from models import storage
 from os import getenv
-from flask import request, jsonify, abort
+from flask import jsonify, abort
 
 mode = getenv("HBNB_TYPE_STORAGE")
 
