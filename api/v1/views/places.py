@@ -96,9 +96,14 @@ def places_search():
             storage.get(Amenity, _id) for _id in id_amenities
             if storage.get(Amenity, _id)
         ]
-        places = list(filter(
-            lambda place: amenities in place.amenities, places
-        ))
+        res = []
+        for place in places:
+            res.append(place.to_dict())
+            for amenity in amenities:
+                if amenity not in place.amenities:
+                    res.pop()
+                    break
+        return jsonify(res)
 
     return jsonify([place.to_dict() for place in places])
 
