@@ -70,30 +70,32 @@ def insert_place(city_id):
 def places_search():
     """Retrieves all Place objects depending of the body of the request"""
     body = request.get_json()
-    id_states = body.get("states") if body.get("states") else []
-    id_cities = body.get("cities") if body.get("cities") else []
-    id_amenities = body.get("amenities") if body.get("amenities") else []
+    id_states = body.get("states", [])
+    id_cities = body.get("cities", [])
+    id_amenities = body.get("amenities", [])
     places = []
     if type(body) != dict:
         abort(400, description="Not a JSON")
-    if body == {} or len(id_states + id_cities + id_amenities) == 0:
+    if id_states == id_cities == []:
         places = storage.all(Place).values()
-    elif id_states != [] and id_cities != []:
-        states = [storage.get(State, _id) for _id in id_states]
+    else:
+        states = [
+            storage.get(State, _id) for _id in id_states
+            if storage.get(State, _id)
+        ]
         cities = [city for state in states for city in state.cities]
-        cities += [storage.get(City, _id) for _id in id_cities]
+        cities += [
+            storage.get(City, _id) for _id in id_cities
+            if storage.get(City, _id)
+        ]
         cities = list(set(cities))
-        places = [place for city in cities for place in city.places]
-    elif id_states != [] and id_cities == []:
-        states = [storage.get(State, _id) for _id in id_states]
-        cities = [city for state in states for city in state.cities]
-        places = [place for city in cities for place in city.places]
-    elif id_cities != []:
-        cities = [storage.get(City, _id) for _id in id_cities]
         places = [place for city in cities for place in city.places]
 
     if id_amenities != []:
-        amenities = [storage.get(Amenity, _id) for _id in id_amenities]
+        amenities = [
+            storage.get(Amenity, _id) for _id in id_amenities
+            if storage.get(Amenity, _id)
+        ]
         places = list(filter(
             lambda place: amenities in place.amenities, places
         ))
