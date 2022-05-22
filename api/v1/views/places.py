@@ -7,6 +7,7 @@ from models.city import City
 from models.place import Place
 from models.user import User
 from models.state import State
+from models.amenity import Amenity
 
 
 @app_views.route("/cities/<city_id>/places", methods=["GET"],
@@ -68,7 +69,6 @@ def insert_place(city_id):
                  strict_slashes=False)
 def places_search():
     """Retrieves all Place objects depending of the body of the request"""
-    print("volvimos perraa")
     body = request.get_json()
     id_states = body.get("states") if body.get("states") else []
     id_cities = body.get("cities") if body.get("cities") else []
@@ -91,9 +91,14 @@ def places_search():
     elif id_cities != []:
         cities = [storage.get(City, _id) for _id in id_cities]
         places = [place for city in cities for place in city.places]
+
     if id_amenities != []:
-        places = list(filter(lambda e: e.amenities in id_amenities, places))
-    return jsonify([place.to_dict() for place in places], )
+        amenities = [storage.get(Amenity, _id) for _id in id_amenities]
+        places = list(filter(
+            lambda place: amenities in place.amenities, places
+        ))
+
+    return jsonify([place.to_dict() for place in places])
 
 
 @app_views.route("/places/<place_id>", methods=["PUT"],
