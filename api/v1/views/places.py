@@ -91,21 +91,20 @@ def places_search():
         cities = list(set(cities))
         places = [place for city in cities for place in city.places]
 
-    if id_amenities != []:
-        amenities = [
-            storage.get(Amenity, _id) for _id in id_amenities
-            if storage.get(Amenity, _id)
-        ]
-        res = []
-        for place in places:
-            res.append(place.to_dict())
-            for amenity in amenities:
-                if amenity not in place.amenities:
-                    res.pop()
-                    break
-        return jsonify(res)
+    amenities = [
+        storage.get(Amenity, _id) for _id in id_amenities
+        if storage.get(Amenity, _id)
+    ]
 
-    return jsonify([place.to_dict() for place in places])
+    res = []
+    for place in places:
+        res.append(place.to_dict())
+        for amenity in amenities:
+            if amenity not in place.amenities:
+                res.pop()
+                break
+
+    return jsonify(res)
 
 
 @app_views.route("/places/<place_id>", methods=["PUT"],
