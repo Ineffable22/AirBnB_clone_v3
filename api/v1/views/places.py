@@ -70,12 +70,12 @@ def insert_place(city_id):
 def places_search():
     """Retrieves all Place objects depending of the body of the request"""
     body = request.get_json()
+    if type(body) != dict:
+        abort(400, description="Not a JSON")
     id_states = body.get("states", [])
     id_cities = body.get("cities", [])
     id_amenities = body.get("amenities", [])
     places = []
-    if type(body) != dict:
-        abort(400, description="Not a JSON")
     if id_states == id_cities == []:
         places = storage.all(Place).values()
     else:
