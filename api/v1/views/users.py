@@ -8,6 +8,7 @@ from flask import jsonify, abort, request
 
 @app_views.route('/users', methods=['GET'],
                  strict_slashes=False)
+@swag_from('documentation/state/all_users.yml', methods=['GET'])
 def users():
     """Get all stored users"""
     res = [
@@ -18,6 +19,7 @@ def users():
 
 @app_views.route('/users/<user_id>', methods=['GET'],
                  strict_slashes=False)
+@swag_from('documentation/user/get_user.yml', methods=['GET'])
 def user_by_id(user_id):
     """Get a User object by id"""
     res = storage.get(User, user_id)
@@ -28,6 +30,7 @@ def user_by_id(user_id):
 
 @app_views.route('/users/<user_id>', methods=['DELETE'],
                  strict_slashes=False)
+@swag_from('documentation/user/delete_user.yml', methods=['DELETE'])
 def delete_user(user_id):
     """Delete an User object by its id """
     user = storage.get(User, user_id)
@@ -40,6 +43,7 @@ def delete_user(user_id):
 
 @app_views.route('/users', methods=['POST'],
                  strict_slashes=False)
+@swag_from('documentation/user/post_user.yml', methods=['POST'])
 def insert_user():
     """Insert a new User object"""
     body = request.get_json()
@@ -56,6 +60,7 @@ def insert_user():
 
 @app_views.route('/users/<user_id>', methods=['PUT'],
                  strict_slashes=False)
+@swag_from('documentation/user/put_user.yml', methods=['PUT'])
 def update_user_by_id(user_id):
     """Update an User object"""
     user = storage.get(User, user_id)
