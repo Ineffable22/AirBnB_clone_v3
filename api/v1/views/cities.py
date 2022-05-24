@@ -9,6 +9,7 @@ from models.state import State
 
 @app_views.route("/states/<state_id>/cities", methods=["GET"],
                  strict_slashes=False)
+@swag_from('documentation/city/cities_by_state.yml', methods=['GET'])
 def cities_by_state(state_id):
     """View function that return city objects by state"""
     state = storage.get(State, state_id)
@@ -19,6 +20,7 @@ def cities_by_state(state_id):
 
 @app_views.route("/cities/<city_id>", methods=["GET"],
                  strict_slashes=False)
+@swag_from('documentation/city/get_city.yml', methods=['GET'])
 def show_city(city_id):
     """Endpoint that return a City object"""
     city = storage.get(City, city_id)
@@ -29,6 +31,7 @@ def show_city(city_id):
 
 @app_views.route("/cities/<city_id>", methods=["DELETE"],
                  strict_slashes=False)
+@swag_from('documentation/city/delete_city.yml', methods=['DELETE'])
 def delete_city(city_id):
     """Endpoint that delete a City object"""
     city = storage.get(City, city_id)
@@ -41,6 +44,7 @@ def delete_city(city_id):
 
 @app_views.route("/states/<state_id>/cities", methods=["POST"],
                  strict_slashes=False)
+@swag_from('documentation/city/post_city.yml', methods=['POST'])
 def insert_city(state_id):
     """Endpoint that insert a City object"""
     state = storage.get(State, state_id)
@@ -59,6 +63,7 @@ def insert_city(state_id):
 
 @app_views.route("/cities/<city_id>", methods=["PUT"],
                  strict_slashes=False)
+@swag_from('documentation/city/put_city.yml', methods=['PUT'])
 def update_city(city_id):
     """Endpoint that update a City object"""
     city = storage.get(City, city_id)
