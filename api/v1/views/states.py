@@ -5,18 +5,19 @@ from models import storage
 from models.state import State
 from api.v1.views import app_views
 from flask import jsonify, abort, request
+from flasgger.utils import swag_from
 
+@app_views.route('/states', methods=['GET'], strict_slashes=False)
+@swag_from('documentation/state/get_state.yml', methods=['GET'])
+def get_states():
+    dict_ = []
+    for val in storage.all(State).values():
+        dict_.append(val.to_dict())
+    return jsonify(dict_)
 
-@app_views.route('/states', defaults={'state_id': None}, methods=['GET'],
-                 strict_slashes=False)
 @app_views.route('/states/<path:state_id>')
-def get_method(state_id):
-    if state_id is None:
-        dict_ = []
-        for val in storage.all(State).values():
-            dict_.append(val.to_dict())
-        return jsonify(dict_)
-
+@swag_from('documentation/state/get_state.yml', methods=['GET'])
+def get_state(state_id):
     state = storage.get(State, state_id)
     if state is None:
         abort(404)
@@ -25,7 +26,8 @@ def get_method(state_id):
 
 @app_views.route('/states/<path:state_id>', methods=['DELETE'],
                  strict_slashes=False)
-def delete_method(state_id):
+@swag_from('documentation/state/delete_state.yml', methods=['DELETE'])
+def delete_state(state_id):
     if state_id is None:
         abort(404)
     state = storage.get(State, state_id)
@@ -38,7 +40,8 @@ def delete_method(state_id):
 
 @app_views.route('/states', methods=['POST'],
                  strict_slashes=False)
-def post_method():
+@swag_from('documentation/state/post_state.yml', methods=['POST'])
+def post_state():
     res = request.get_json()
     if type(res) != dict:
         return abort(400, {'message': 'Not a JSON'})
@@ -51,7 +54,8 @@ def post_method():
 
 @app_views.route('/states/<path:state_id>', methods=['PUT'],
                  strict_slashes=False)
-def put_method(state_id):
+@swag_from('documentation/state/put_state.yml', methods=['PUT'])
+def put_state(state_id):
     state = storage.get(State, state_id)
     if state is None:
         abort(404)
