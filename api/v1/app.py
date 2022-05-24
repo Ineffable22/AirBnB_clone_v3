@@ -7,6 +7,9 @@ from flask import Flask, jsonify
 from flask_cors import CORS
 from models import storage
 from api.v1.views import app_views
+from flasgger import Swagger
+from flasgger.utils import swag_from
+
 
 app = Flask(__name__)
 app.register_blueprint(app_views)
@@ -23,6 +26,14 @@ def teardown(self):
 def error(e):
     """Handler for 404 errors"""
     return jsonify({"error": "Not found"}), 404
+
+
+app.config['SWAGGER'] = {
+    'title': 'AirBnB clone Restful API',
+    'uiversion': 3
+}
+
+Swagger(app)
 
 
 if __name__ == '__main__':
