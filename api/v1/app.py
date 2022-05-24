@@ -10,11 +10,9 @@ from api.v1.views import app_views
 from flasgger import Swagger
 
 app = Flask(__name__)
-
 app.url_map.strict_slashes = False
-
 app.register_blueprint(app_views)
-cors = CORS(app, resources={r"/api/v1/*": {"origins": "0.0.0.0"}})
+CORS(app, resources={r"/api/v1/*": {"origins": "0.0.0.0"}})
 Swagger(app)
 
 
@@ -26,12 +24,7 @@ def teardown(self):
 
 @app.errorhandler(404)
 def error(error):
-    """
-    This function Handles 404 errors
-    ---
-    parameters:
-        name: error
-    """
+    """This function Handles 404 errors"""
     return jsonify({"error": "Not found"}), 404
 
 
