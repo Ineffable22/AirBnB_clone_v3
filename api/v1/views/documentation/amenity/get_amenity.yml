@@ -1,18 +1,18 @@
-Gets a specific state by ID or the list of all states if no ID is specied
+gets amenity by ID
 ---
 tags:
-  - States
+  - Amenities
 parameters:
-  - name: state_id
+  - name: amenity_id
     in: path
     type: string
-    required: false
-    description: the unique id of the state
+    required: true
+    description: The id of the amenity
 responses:
   404:
-    description: State not found
+    description: amenity not found.
   200:
-    description: Successful request
+    description: request executed successfully
     schema:
       properties:
         __class__:
@@ -25,7 +25,7 @@ responses:
            description: time of last update of the instance
         id:
           type: string
-          description: The uuid of the state instance
+          description: The uuid of the instance
         name:
            type: string
-           description: State name
+           description: amenity name
