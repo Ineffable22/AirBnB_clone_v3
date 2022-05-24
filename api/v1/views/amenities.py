@@ -3,12 +3,12 @@
 all default RESTFul API actions"""
 from models import storage
 from models.amenity import Amenity
-from api.v1.views import app_views
+from api.v1.views import app_views as views
 from flask import jsonify, abort, request
 from .utils import get_resource
 
 
-@app_views.route('/amenities', methods=['GET'])
+@views.route('/amenities', methods=['GET'])
 def get_amenities():
     """Get all Amenities"""
     amenities = storage.all("Amenity").values()
@@ -16,14 +16,14 @@ def get_amenities():
     return jsonify(res)
 
 
-@app_views.route('/amenities/<amenity_id>', methods=['GET'])
+@views.route('/amenities/<amenity_id>', methods=['GET'])
 def get_amenity(amenity_id):
     """Get Amenity filter by id"""
     amenity = get_resource("Amenity", amenity_id)
     return jsonify(amenity.to_dict())
 
 
-@app_views.route('/amenities/<amenity_id>', methods=['DELETE'])
+@views.route('/amenities/<amenity_id>', methods=['DELETE'])
 def delete_amenity(amenity_id):
     """Delete an Amenity"""
     amenity = get_resource("Amenity", amenity_id)
@@ -32,7 +32,7 @@ def delete_amenity(amenity_id):
     return jsonify({})
 
 
-@app_views.route('/amenities', methods=['POST'])
+@views.route('/amenities', methods=['POST'])
 def insert_amenity():
     """Insert new Amenity"""
     body = get_resource(_req=request)
@@ -43,7 +43,7 @@ def insert_amenity():
     return jsonify(new_amenity.to_dict()), 201
 
 
-@app_views.route('/amenities/<amenity_id>', methods=['PUT'])
+@views.route('/amenities/<amenity_id>', methods=['PUT'])
 def update_amenity(amenity_id):
     """Update an Amenity"""
     [amenity, body] = get_resource("Amenity", amenity_id, request)

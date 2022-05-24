@@ -1,38 +1,32 @@
 #!/usr/bin/python3
 """New view for the link between Place objects and Amenity objects"""
-from models.place import Place
-from models.amenity import Amenity
-from api.v1.views import app_views
+from api.v1.views import app_views as views
 from models import storage
 from os import getenv
 from flask import jsonify, abort
+from .utils import get_resource
 
 mode = getenv("HBNB_TYPE_STORAGE")
 
 
-@app_views.route("/places/<place_id>/amenities", methods=["GET"],
-                 strict_slashes=False)
-def amenities_from_place(place_id):
+@views.route("/places/<place_id>/amenities", methods=["GET"])
+def get_amenities(place_id):
     """Get all amenities of a place object"""
-    place = storage.get(Place, place_id)
-    if place is None:
-        abort(404)
+    place = get_resource("Place", place_id)
     if mode == "db":
-        return jsonify([amenity.to_dict() for amenity in place.amenities])
+        amenities = place.amenities
+        response = [amenity.to_dict() for amenity in amenities]
     else:
-        return jsonify([
-            storage.get(Amenity, _id).to_dict() for _id in place.amenity_ids
-        ])
+        ids = place.amenity_ids
+        response = [storage.get("Amenity", id).to_dict() for id in ids]
+    return jsonify(response)
 
 
-@app_views.route("/places/<place_id>/amenities/<amenity_id>",
-                 methods=["DELETE"], strict_slashes=False)
-def delete_amenity_from_place(place_id, amenity_id):
+@views.route("/places/<place_id>/amenities/<amenity_id>", methods=["DELETE"])
+def delete_amenity(place_id, amenity_id):
     """Delete a Amenity object by its id from a Place object"""
-    place = storage.get(Place, place_id)
-    amenity = storage.get(Amenity, amenity_id)
-    if place is None or amenity is None:
-        abort(404)
+    place = get_resource("Place", place_id)
+    amenity = get_resource("Amenity", amenity_id)
     if mode == "db":
         if amenity not in place.amenities:
             abort(404)
@@ -41,18 +35,14 @@ def delete_amenity_from_place(place_id, amenity_id):
             abort(404)
     amenity.delete()
     storage.save()
-
     return jsonify({})
 
 
-@app_views.route("places/<place_id>/amenities/<amenity_id>", methods=["POST"],
-                 strict_slashes=False)
+@views.route("places/<place_id>/amenities/<amenity_id>", methods=["POST"])
 def insert_amenity_in_place(place_id, amenity_id):
     """Insert new amenity object into Place object"""
-    place = storage.get(Place, place_id)
-    amenity = storage.get(Amenity, amenity_id)
-    if place is None or amenity is None:
-        abort(404)
+    place = get_resource("Place", place_id)
+    amenity = get_resource("Amenity", amenity_id)
     if mode == "db":
         if amenity in place.amenities:
             return jsonify(amenity.to_dict())

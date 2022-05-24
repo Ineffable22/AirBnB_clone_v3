@@ -2,26 +2,26 @@
 """This module implement a rule that return a view"""
 from flask import jsonify, abort, request
 from models import storage
-from api.v1.views import app_views
+from api.v1.views import app_views as views
 from models.place import Place
 from .utils import get_resource
 
 
-@app_views.route("/cities/<city_id>/places", methods=["GET"])
-def place_by_city(city_id):
+@views.route("/cities/<city_id>/places", methods=["GET"])
+def get_places(city_id):
     """View function that return place objects by city"""
     places = get_resource("City", city_id).places
     return jsonify([place.to_dict() for place in places])
 
 
-@app_views.route("/places/<place_id>", methods=["GET"])
-def show_place(place_id):
+@views.route("/places/<place_id>", methods=["GET"])
+def get_place(place_id):
     """Endpoint that return a Place object"""
     place = get_resource("Place", place_id)
     return jsonify(place.to_dict())
 
 
-@app_views.route("/places/<place_id>", methods=["DELETE"])
+@views.route("/places/<place_id>", methods=["DELETE"])
 def delete_place(place_id):
     """Endpoint that delete a Place object"""
     place = get_resource("Place", place_id)
@@ -30,7 +30,7 @@ def delete_place(place_id):
     return jsonify({})
 
 
-@app_views.route("/cities/<city_id>/places", methods=["POST"])
+@views.route("/cities/<city_id>/places", methods=["POST"])
 def insert_place(city_id):
     """Endpoint that insert a Place object"""
     [_, body] = get_resource("City", city_id, request)
@@ -45,8 +45,8 @@ def insert_place(city_id):
     return jsonify(new_place.to_dict()), 201
 
 
-@app_views.route("/places_search", methods=["POST"])
-def places_search():
+@views.route("/places_search", methods=["POST"])
+def search_places():
     """Retrieves all Place objects depending of the body of the request"""
     body = get_resource(_req=request)
     keys = ["states", "cities", "amenities"]
@@ -77,7 +77,7 @@ def places_search():
     return jsonify(res)
 
 
-@app_views.route("/places/<place_id>", methods=["PUT"])
+@views.route("/places/<place_id>", methods=["PUT"])
 def update_place(place_id):
     """Endpoint that update a Place object"""
     [place, body] = get_resource("Place", place_id, request)
