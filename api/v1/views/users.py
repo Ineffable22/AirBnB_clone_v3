@@ -9,7 +9,7 @@ from flasgger.utils import swag_from
 
 @app_views.route('/users', methods=['GET'],
                  strict_slashes=False)
-@swag_from('documentation/state/all_users.yml', methods=['GET'])
+@swag_from('documentation/user/all_users.yml', methods=['GET'])
 def users():
     """Get all stored users"""
     res = [
