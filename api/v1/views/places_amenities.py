@@ -6,6 +6,7 @@ from api.v1.views import app_views
 from models import storage
 from os import getenv
 from flask import jsonify, abort
+from flasgger.utils import swag_from
 
 mode = getenv("HBNB_TYPE_STORAGE")
 
