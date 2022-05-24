@@ -12,6 +12,8 @@ mode = getenv("HBNB_TYPE_STORAGE")
 
 @app_views.route("/places/<place_id>/amenities", methods=["GET"],
                  strict_slashes=False)
+@swag_from('documentation/place_amenity/get_places_amenities.yml',
+           methods=['GET'])
 def amenities_from_place(place_id):
     """Get all amenities of a place object"""
     place = storage.get(Place, place_id)
@@ -27,6 +29,8 @@ def amenities_from_place(place_id):
 
 @app_views.route("/places/<place_id>/amenities/<amenity_id>",
                  methods=["DELETE"], strict_slashes=False)
+@swag_from('documentation/place_amenity/delete_place_amenities.yml',
+           methods=['DELETE'])
 def delete_amenity_from_place(place_id, amenity_id):
     """Delete a Amenity object by its id from a Place object"""
     place = storage.get(Place, place_id)
@@ -47,6 +51,8 @@ def delete_amenity_from_place(place_id, amenity_id):
 
 @app_views.route("places/<place_id>/amenities/<amenity_id>", methods=["POST"],
                  strict_slashes=False)
+@swag_from('documentation/place_amenity/post_place_amenities.yml',
+           methods=['POST'])
 def insert_amenity_in_place(place_id, amenity_id):
     """Insert new amenity object into Place object"""
     place = storage.get(Place, place_id)
